@@ -71,7 +71,9 @@ def set_time4convert(jsonline, output=None, theme=None, dpi = 96, timeout = 20):
     p = Process(target=json2pdf, args=(jsonline, output, theme, dpi))
     p.start()
     p.join(timeout=timeout)
-    p.terminate()
+    if p.is_alive():
+        p.terminate()
+    p.join()
 
 
 data_path = "/seaweedfs_mount_hdd/lts_data/vision/synth_dataset/corpus/markdown"
@@ -81,9 +83,9 @@ if __name__ == '__main__':
     start_time = time()
     for json_file in json_files:
         with open(json_file) as f:           
-            sub_f = islice(f, 100)
+            sub_f = islice(f, 5000)
             with ProcessPoolExecutor(max_workers=64) as executor:
-                futures = {executor.submit(set_time4convert, line, None, "themes/autowrap.css",  None, 20) for line in tqdm(sub_f)}
+                futures = {executor.submit(set_time4convert, line, None, "themes/autowrap.css",  None, 15) for line in tqdm(sub_f)}
                 concurrent.futures.wait(futures)
         print(time() - start_time)
         # break

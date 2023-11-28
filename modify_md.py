@@ -13,8 +13,8 @@ if __name__ == '__main__':
         start_time = time()
         for line in tqdm(f):
             text = json.loads(line)['text']
-            # mdm = ModifyMarkdown(text)
-            # text = mdm.modify_markdown()
+            mdm = ModifyMarkdown(text)
+            text = mdm.modify_markdown()
             md_file_path = 'md_files/{}.md'.format(cnt)
             with open(md_file_path, 'w', encoding='utf-8') as f:
                 f.write(text)
